@@ -72,17 +72,23 @@ Pi discovers only `index.ts` in this directory. Helper files are imported normal
 
 ## Round trip
 
-```text
-Pi command                         Node worker (different PID)
-    | --- run(text, snapshot) --------> |
-    |                                  |
-    | <--- progress(message) ---------- |  run is still pending
-    | read live Pi session ID          |
-    | show progress; create token      |
-    | --- callback receipt ----------> |
-    |                                  | use receipt in output
-    | <--- run result ---------------- |
-    | disconnect IPC; await worker exit |
+```mermaid
+sequenceDiagram
+    autonumber
+    participant Pi as Pi (extension host)
+    participant W as Node worker (different PID)
+
+    Pi->>W: run(text, snapshot)
+    activate W
+    W->>Pi: progress(message)
+    activate Pi
+    Note over Pi: read live Pi session ID\ncreate token; show progress
+    Pi-->>W: callback receipt
+    deactivate Pi
+    Note over W: use receipt in output
+    W-->>Pi: run result
+    deactivate W
+    Pi->>W: disconnect IPC; await worker exit
 ```
 
 The host uses `RpcPeer<WorkerAPI, HostAPI>`; the worker uses `RpcPeer<HostAPI, WorkerAPI>`. `call()` checks method names, parameter types, and result types at compile time. Incoming requests are handled asynchronously, not blocked behind outgoing calls.
