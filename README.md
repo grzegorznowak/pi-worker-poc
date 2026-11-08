@@ -82,13 +82,13 @@ sequenceDiagram
     activate W
     W->>Pi: progress(message)
     activate Pi
-    Note over Pi: read live Pi session ID\ncreate token; show progress
+    Note over Pi: Read live session ID<br/>Create token and show progress
     Pi-->>W: callback receipt
     deactivate Pi
     Note over W: use receipt in output
     W-->>Pi: run result
     deactivate W
-    Pi->>W: disconnect IPC; await worker exit
+    Pi->>W: Disconnect IPC and await worker exit
 ```
 
 The host uses `RpcPeer<WorkerAPI, HostAPI>`; the worker uses `RpcPeer<HostAPI, WorkerAPI>`. `call()` checks method names, parameter types, and result types at compile time. Incoming requests are handled asynchronously, not blocked behind outgoing calls.
