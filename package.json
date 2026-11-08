@@ -1,0 +1,12 @@
+{
+  "name": "pi-worker-poc",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22.19.0" },
+  "scripts": {
+    "test": "node --test tests/*.test.ts && node tests/pi-integration.mjs && node tests/prompt-integration.mjs",
+    "test:unit": "node --test tests/*.test.ts",
+    "test:pi": "node tests/pi-integration.mjs && node tests/prompt-integration.mjs",
+    "test:prompt": "node tests/prompt-integration.mjs"
+  }
+}
